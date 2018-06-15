@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!--Import Google Icon Font-->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<!--Import materialize.css-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+	
+	<!--Let browser know website is optimized for mobile-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/todo.css">
+	<style>
+		.calendar-timeline{
+			margin-top:20px;
+			width:100%;
+			overflow-y:visible;  
+		}
+		
+		.calendar-timeline::-webkit-scrollbar.calendar-timeline *::-webkit-scrollbar {
+			display:none;
+		}
+		.calendar-timeline .calendar-dates{
+			position:relative;
+			width:100%;
+			overflow-y: scroll;
+			display:inline-grid;
+			grid-auto-flow: column;
+			grid-auto-columns: calc(79% / 8);
+			justify-content: space-between;
+			justify-items: center;
+			grid-column-gap: 20px;
+		}
+		.calendar-timeline .calendar-dates .calendar-item{
+			position: relative;
+			width:100%;
+			height: calc(100% - 5px);
+			text-align:center;
+			cursor:pointer;
+			overflow-y: visible;
+		}
+		.calendar-timeline .calendar-dates .calendar-item span{
+			display:block;
+			padding: 5px 0 5px;
+		}
+		.calendar-timeline .calendar-dates .calendar-item span.calendar-date{
+			padding-bottom: 15px;
+		}
+		.calendar-timeline .calendar-dates .calendar-item:after{
+			content:"";
+			position: absolute;
+			width:12px;
+			border-bottom: 6px solid transparent;
+			border-radius: 3px;
+			left:calc(50% - 6px);
+			bottom: -5px;
+		}
+		.calendar-timeline .calendar-dates .calendar-item.active:after,.calendar-timeline .calendar-dates .calendar-item:hover:after{
+			border-color:#2196f3;
+			box-shadow: 0 1px 7px 2px rgba(152, 152, 152, 0.21);
+			transition: all .1s ease-in;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="header white fixed">
+		<div class="header-main grid-container justify-space-between grid-col-2">
+			<div class="grid-item" style="display:grid;justify-self: start;">
+				<small class="col s12 sub-title current-date">Friday, May '18</small>
+				<span class="col s10 title">To-Do List</span>
+			</div>
+			<div class="grid-item" style="place-self: center end;padding-top: 1.2rem;">
+				<button class="btn btn-floating waves-effect transparent right-align z-depth-0" style="margin-top:.35rem">
+					<i class=" material-icons bold-text dark-text" style="font-size:1.4rem;">search</i>
+				</button>
+			</div>
+		</div>
+		<div class="calendar-timeline"></div>
+	</div>
+		
+	<div id="todo-module" style="padding-bottom:75px;">		
+		<div id="todo-list">
+			<!-- <script id="todo-template" type="text/template">
+				{{#todos}}
+				<div class="row todo-item-wrapper no-margin">
+					<div class="col s12">
+						<div class=" card todo-item no-margin z-depth-0">
+							<div class="grid-container justify-space-between card-content">
+								<span class="todo-tag" data-tag="red"></span>
+								<span class="todo-name normal-text bold-text">{{name}}</span>
+								<i class="todo-pin material-icons normal-text">outlined_flag</i>
+								<label style="justify-self:end;">
+									<input type="checkbox" {{#done}}checked="checked" {{/done}} class="todo-check">
+									<span></span>
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+				{{/todos}}
+				{{^todos}}
+				<div class="row no-margin">
+					<h5 class="col s12 no-margin grey-text text-darken-1">nothing-to-do :)</h5>
+				</div>
+				{{/todos}}
+			</script> -->
+			<script id="todo-template" type="text/template">
+				<div class="row todo-item-wrapper no-margin">
+					<div class="col s12">
+						<div class=" card todo-item no-margin z-depth-0">
+							<div class="grid-container justify-space-between card-content">
+								<span class="todo-tag" data-tag="red"></span>
+								<span class="name normal-text bold-text"></span>
+								<!-- <i class="todo-pin pinned material-icons normal-text">outlined_flag</i> -->
+								<i class="todo-pin pinned material-icons normal-text">outlined_flag</i>
+								<label style="justify-self:end;">
+									<input type="checkbox" class="done">
+									<span></span>
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</script>
+		</div>
+		<div class="floating-btn-container">
+			<button id="add-item-btn" class="primary-color btn btn-floating waves-effect white-text" data-modal="#add-item">
+				<i class="material-icons">add</i>
+			</button>
+		</div>
+	</div>
+	
+	
+	
+	<!--Scripts-->
+	<!-- Firebase -->
+	<script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+	<script>
+		// Initialize Firebase
+		var config = {
+			apiKey: "AIzaSyA6r_jbKrHoPsySMlAbjtTnZMevcrQ2Fqs",
+			authDomain: "what-todo-now.firebaseapp.com",
+			databaseURL: "https://what-todo-now.firebaseio.com",
+			projectId: "what-todo-now",
+			storageBucket: "",
+			messagingSenderId: "307135410011"
+		};
+		firebase.initializeApp(config);
+	</script>
+	<!-- jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<!-- hammer.js -->
+	<script src="./js/hammer.min.js" type="text/javascript"></script>
+	<script src="./js/jquery.hammer.js" type="text/javascript"></script>
+	<!-- materializecss.js -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+	
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.5/lodash.min.js" type="text/javascript"></script> -->
+	
+	<!-- Custom JS lib -->
+	<script src="./js/sticky-header.js"></script>
+	<script src="./js/list.js" type="text/javascript"></script>
+	
+	<script type="text/javascript">
+		window.scrollTo(0, 1);
+		// $(document).ready(function(){
+			var listOpts = {
+				attributes:[
+					'name',
+					{
+						name:'done',
+						render:function(val,ele){
+							if(val == true)
+								ele.setAttribute("checked","checked");
+						},
+						events:{
+							click:function(listObj,id,item){
+								listObj.update(id, { done: !item.done }, false);
+							}
+						},
+					},
+					{
+						name:'pinned',
+						render:function(val,ele){
+							ele.innerHTML = (val == true) ? "flag" :"outlined_flag";
+						},
+						events:{
+							click: function(listObj,id,item){
+								listObj.update(id, { pinned: !item.pinned });
+							}
+						},
+					},
+				],
+				container: "#todo-list",
+				item:".todo-item-wrapper",
+				template: "#todo-template",
+				localStorage: false
+			};
+			var seed = [
+				{name:"Item1",done:false, pinned:false},
+				{name:"Item2",done:true , pinned:true},
+				{name:"Item3",done:true , pinned: false},
+				{name:"Item4",done:false, pinned: false},
+				{name:"Item1",done:false, pinned:false},
+				{name:"Item2",done:true , pinned:true},
+				{name:"Item3",done:true , pinned: false},
+				{name:"Item4",done:false, pinned: false},
+				{name:"Item1",done:false, pinned:false},
+				{name:"Item2",done:true , pinned:true},
+				{name:"Item3",done:true , pinned: false},
+				{name:"Item4",done:false, pinned: false},
+				{name:"Item1",done:false, pinned:false},
+				{name:"Item2",done:true , pinned:true},
+				{name:"Item3",done:true , pinned: false},
+				{name:"Item4",done:false, pinned: false},
+				{name:"Item1",done:false, pinned:false},
+				{name:"Item2",done:true , pinned:true},
+				{name:"Item3",done:true , pinned: false},
+				{name:"Item4",done:false, pinned: false},
+				{name:"Item1",done:false, pinned:false},
+				{name:"Item2",done:true , pinned:true},
+				{name:"Item3",done:true , pinned: false},
+				{name:"Item4",done:false, pinned: false},
+			]
+			var list = new List(listOpts,seed);
+			
+			$('select').formSelect();
+			
+			/*$("#todo-module").hammer().bind("swipe",".todo-item-wrapper", function(){
+				console.log("swiped");
+			})*/
+		// });
+		
+		(function(){
+
+			function _htmlToElement(htmlStr) {
+				var tmp = document.createElement("template");
+				tmp.innerHTML = htmlStr.trim();
+				return tmp.content.firstChild;
+			}
+
+
+			var template = `<div class="calendar-item">
+					<span class="calendar-day sub-title"></span>
+					<span class="calendar-date x-small-text x-bold-text"></span>
+				</div>`;
+			
+			var date = new Date();
+			var currDate = date.getDate();
+			var currMonth = date.getMonth();
+			
+
+			var content = "";
+			var days = ['S','M','T','W','T','F','S'];
+			for(var i = 1;;i++){
+				date.setDate(i);
+				if(date.getMonth() != currMonth)	break;
+				var ele = _htmlToElement(template);
+				ele.querySelector(".calendar-day").innerHTML = days[date.getDay()];
+				ele.querySelector(".calendar-date").innerHTML = i;
+				if(i == currDate)
+					ele.classList.add("active");
+				content+=ele.outerHTML;
+			}
+			$(".calendar-timeline").html(`<div class="calendar-dates">${content}</div>`);
+			var scrollX = $(".calendar-timeline .calendar-dates .calendar-item.active").position().left;
+			document.querySelector(".calendar-timeline .calendar-dates").scrollTo(scrollX,0);
+		})();
+	</script>
+</body>
+</html>

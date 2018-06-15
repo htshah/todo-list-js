@@ -1,0 +1,89 @@
+/* Ripple Modal Styles */
+.modal {
+  background: #fff;
+  height: 100vh;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  -webkit-transform-origin: 50% 50%;
+          transform-origin: 50% 50%;
+  transition: opacity .5s linear;
+  width: 100vw;
+  z-index: 2;
+}
+.modal.active {
+  opacity: 1;
+  pointer-events: auto;
+  transition: none;
+}
+
+.ripple-container {
+  height: 100vh;
+  left: 0;
+  overflow: hidden;
+  position: fixed;
+  pointer-events: none;
+  top: 0;
+  width: 100vw;
+  z-index: 3;
+}
+.ripple-container .ripple {
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  background: #448aff;
+  border-radius: 50%;
+  display: block;
+  -webkit-mask-image: radial-gradient(circle, #fff, #000);
+          mask-image: radial-gradient(circle, #fff, #000);
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  -webkit-transform: translate(-50%, -50%) scale(0) translateZ(0) translate3d(0, 0, 0);
+          transform: translate(-50%, -50%) scale(0) translateZ(0) translate3d(0, 0, 0);
+  overflow: hidden;
+  will-change: opacity;
+}
+.ripple-container .ripple.is-animating {
+  -webkit-animation: ripple 1s linear;
+          animation: ripple 1s linear;
+  -webkit-transform: translate(-50%, -50%) scale(1) translateZ(0) translate3d(0, 0, 0);
+          transform: translate(-50%, -50%) scale(1) translateZ(0) translate3d(0, 0, 0);
+}
+
+@-webkit-keyframes ripple {
+  0% {
+    -webkit-transform: translate(-50%, -50%) scale(0) translateZ(0) translate3d(0, 0, 0);
+            transform: translate(-50%, -50%) scale(0) translateZ(0) translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  50% {
+    -webkit-transform: translate(-50%, -50%) scale(1) translateZ(0) translate3d(0, 0, 0);
+            transform: translate(-50%, -50%) scale(1) translateZ(0) translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translate(-50%, -50%) scale(1) translateZ(0) translate3d(0, 0, 0);
+            transform: translate(-50%, -50%) scale(1) translateZ(0) translate3d(0, 0, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes ripple {
+  0% {
+    -webkit-transform: translate(-50%, -50%) scale(0) translateZ(0) translate3d(0, 0, 0);
+            transform: translate(-50%, -50%) scale(0) translateZ(0) translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  50% {
+    -webkit-transform: translate(-50%, -50%) scale(1) translateZ(0) translate3d(0, 0, 0);
+            transform: translate(-50%, -50%) scale(1) translateZ(0) translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translate(-50%, -50%) scale(1) translateZ(0) translate3d(0, 0, 0);
+            transform: translate(-50%, -50%) scale(1) translateZ(0) translate3d(0, 0, 0);
+    opacity: 0;
+  }
+}
