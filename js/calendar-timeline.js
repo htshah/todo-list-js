@@ -69,8 +69,11 @@
         container.innerHTML = `<div class="calendar-dates dragscroll">${content}</div>`;
 
         // Scroll to the current date
-        var offsetX = getOffset(container.querySelector(".calendar-item.active")).left;
-        container.querySelector(".calendar-dates").scrollTo(offsetX-30, 0);
+        var activeItem = container.querySelector(".calendar-item.active");
+        var offsetX = getOffset(activeItem).left;
+        var offsetErr = activeItem.offsetWidth;
+        
+        container.querySelector(".calendar-dates").scrollTo(offsetX - offsetErr, 0);
     }
 
     function getOffset(el) {

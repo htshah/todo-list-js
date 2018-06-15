@@ -11,6 +11,20 @@
 	<link rel="stylesheet" href="css/calendar-timeline.css">
 	<link rel="stylesheet" href="css/todo.css">
 	<link rel="stylesheet" href="css/style.css">
+	<style>
+		#todo-list{
+			position: relative;
+		}
+		#todo-list:empty:after{
+			position: absolute;
+			top: 4rem;
+			content: "Click \"+\" to add an item...";
+			text-align: center;
+			width: 100%;
+			font-weight: 500;
+			color: #9e9e9e;			
+		}
+	</style>
 </head>
 
 <body>
@@ -100,6 +114,7 @@
 			var listOpts = {
 				attributes:[
 					'name',
+					'date',
 					{
 						name:'done',
 						render:function(val,ele){
@@ -167,7 +182,7 @@
 		(function(){
 			var container = document.querySelector(".header .current-date");
 			window.addEventListener("calendar-date-changed",function(e){
-				var date = DateFormat.format.date(e.detail,"ddd MMM, yyyy");
+				var date = DateFormat.format.date(e.detail,"MMMM, yyyy");
 				container.innerHTML = date;
 			});
 		})();

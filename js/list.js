@@ -123,7 +123,7 @@ function List(userOptions,seedList){
             for(var j in options.attributes){
                 var attr = options.attributes[j];
                 var attrEle = ele.querySelector(`.${attr.name}`);
-
+                if(attrEle == null) continue;
                 if(attr.hasOwnProperty("render")){
                     attr.render(item[attr.name], attrEle);
                 }else{

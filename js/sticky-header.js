@@ -36,8 +36,9 @@
     });
 
     // inital event trigger to set height
-    headerEle.trigger("heightChange");
-
+    window.addEventListener("load",function(){
+        headerEle.trigger("heightChange");
+    });
 
     // shrinks the `headerEle` when window
     // is scrolled down after certian amount 

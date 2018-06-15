@@ -22,7 +22,7 @@
     grid-auto-flow: column;
     grid-auto-columns: calc(42% / 8);
     justify-content: space-between;
-    justify-items: center;
+    justify-items: stretch;
     grid-column-gap: 20px;
 }
 
@@ -43,7 +43,6 @@
 }
 .calendar-timeline .calendar-item{
     position: relative;
-    width:100%;
     height: calc(100% - 5px);
     text-align:center;
     cursor:pointer;
