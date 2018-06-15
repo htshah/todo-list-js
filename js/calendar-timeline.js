@@ -16,6 +16,7 @@
     
     
     // Get current date
+    var changeEvent = null;
     var date = new Date();
     var days = ['S','M','T','W','T','F','S'];
     var currDate = date.getDate();
@@ -34,11 +35,21 @@
     }
 
     function _bindEvents(){
+        changeEvent = new CustomEvent("calendar-date-changed",{detail:date},true);
+        
+        window.onload = function(){
+            window.dispatchEvent(changeEvent);
+        }
+        
         container.addEventListener("click",function(e){
             var ele = e.srcElement.closest(".calendar-item");
-            if(ele === null)    return;
+            if(ele === null)    return false;
             document.querySelector(".calendar-item.active").classList.remove("active");
             ele.classList.add("active");
+            date.setDate(ele.querySelector(".calendar-date").innerHTML);
+
+            window.dispatchEvent(changeEvent);
+            // return false;
         });
     }
 
@@ -58,7 +69,7 @@
 
         // Scroll to the current date
         var offsetX = getOffset(container.querySelector(".calendar-item.active")).left;
-        container.querySelector(".calendar-dates").scrollTo(offsetX-20, 0);
+        container.querySelector(".calendar-dates").scrollTo(offsetX-30, 0);
     }
 
     function getOffset(el) {

@@ -72,7 +72,7 @@
     left:calc(50% - 6px);
     bottom: -5px;
 }
-.calendar-timeline .calendar-item.active:after,.calendar-timeline .calendar-item:hover:after{
+.calendar-timeline .calendar-item.active:after{     /*,.calendar-timeline .calendar-item:hover:after*/
     border-color:#2196f3;
     box-shadow: 0 1px 7px 2px rgba(152, 152, 152, 0.21);
     transition: all .1s ease-in;

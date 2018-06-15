@@ -1,3 +1,8 @@
+/**
+ * 
+ * @param object userOptions 
+ * @param array seedList 
+ */
 function List(userOptions,seedList){
     // =========== Initialization ===========
     var container,template;
@@ -166,3 +171,31 @@ function List(userOptions,seedList){
     
     return publicAPI;
 }
+
+/**
+ * Mustache template for todo
+ * <script id="todo-template" type="text/template">
+        {{#todos}}
+        <div class="row todo-item-wrapper no-margin">
+            <div class="col s12">
+                <div class=" card todo-item no-margin z-depth-0">
+                    <div class="grid-container justify-space-between card-content">
+                        <span class="todo-tag" data-tag="red"></span>
+                        <span class="todo-name normal-text bold-text">{{name}}</span>
+                        <i class="todo-pin material-icons normal-text">outlined_flag</i>
+                        <label style="justify-self:end;">
+                            <input type="checkbox" {{#done}}checked="checked" {{/done}} class="todo-check">
+                            <span></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/todos}}
+        {{^todos}}
+        <div class="row no-margin">
+            <h5 class="col s12 no-margin grey-text text-darken-1">nothing-to-do :)</h5>
+        </div>
+        {{/todos}}
+    </script>
+ */

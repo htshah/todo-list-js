@@ -22,7 +22,7 @@
         if(!headerEle.hasClass("shrinked-header")){
             headerEle.addClass("shrinked-header");
             var pos = headerEle.find(".calendar-timeline").position();
-            headerEle.css("transform",`translateY(-${pos.top}px)`)
+            headerEle.css("transform",`translateY(-${pos.top+10}px)`)
             headerEle.trigger("heightChange");
         }
     });
