@@ -9,57 +9,10 @@
 	<!--Let browser know website is optimized for mobile-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/calendar-timeline.css">
 	<link rel="stylesheet" href="css/todo.css">
 	<style>
-		.calendar-timeline{
-			margin-top:20px;
-			width:100%;
-			overflow-y:visible;  
-		}
 		
-		.calendar-timeline::-webkit-scrollbar.calendar-timeline *::-webkit-scrollbar {
-			display:none;
-		}
-		.calendar-timeline .calendar-dates{
-			position:relative;
-			width:100%;
-			overflow-y: scroll;
-			display:inline-grid;
-			grid-auto-flow: column;
-			grid-auto-columns: calc(79% / 8);
-			justify-content: space-between;
-			justify-items: center;
-			grid-column-gap: 20px;
-		}
-		.calendar-timeline .calendar-dates .calendar-item{
-			position: relative;
-			width:100%;
-			height: calc(100% - 5px);
-			text-align:center;
-			cursor:pointer;
-			overflow-y: visible;
-		}
-		.calendar-timeline .calendar-dates .calendar-item span{
-			display:block;
-			padding: 5px 0 5px;
-		}
-		.calendar-timeline .calendar-dates .calendar-item span.calendar-date{
-			padding-bottom: 15px;
-		}
-		.calendar-timeline .calendar-dates .calendar-item:after{
-			content:"";
-			position: absolute;
-			width:12px;
-			border-bottom: 6px solid transparent;
-			border-radius: 3px;
-			left:calc(50% - 6px);
-			bottom: -5px;
-		}
-		.calendar-timeline .calendar-dates .calendar-item.active:after,.calendar-timeline .calendar-dates .calendar-item:hover:after{
-			border-color:#2196f3;
-			box-shadow: 0 1px 7px 2px rgba(152, 152, 152, 0.21);
-			transition: all .1s ease-in;
-		}
 	</style>
 </head>
 
@@ -153,6 +106,7 @@
 	<!-- hammer.js -->
 	<script src="./js/hammer.min.js" type="text/javascript"></script>
 	<script src="./js/jquery.hammer.js" type="text/javascript"></script>
+	<script src="./js/dragscroll.js" type="text/javascript"></script>
 	<!-- materializecss.js -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
 	
@@ -160,6 +114,7 @@
 	
 	<!-- Custom JS lib -->
 	<script src="./js/sticky-header.js"></script>
+	<script src="./js/calendar-timeline.js"></script>
 	<script src="./js/list.js" type="text/javascript"></script>
 	
 	<script type="text/javascript">
@@ -232,41 +187,6 @@
 			})*/
 		// });
 		
-		(function(){
-
-			function _htmlToElement(htmlStr) {
-				var tmp = document.createElement("template");
-				tmp.innerHTML = htmlStr.trim();
-				return tmp.content.firstChild;
-			}
-
-
-			var template = `<div class="calendar-item">
-					<span class="calendar-day sub-title"></span>
-					<span class="calendar-date x-small-text x-bold-text"></span>
-				</div>`;
-			
-			var date = new Date();
-			var currDate = date.getDate();
-			var currMonth = date.getMonth();
-			
-
-			var content = "";
-			var days = ['S','M','T','W','T','F','S'];
-			for(var i = 1;;i++){
-				date.setDate(i);
-				if(date.getMonth() != currMonth)	break;
-				var ele = _htmlToElement(template);
-				ele.querySelector(".calendar-day").innerHTML = days[date.getDay()];
-				ele.querySelector(".calendar-date").innerHTML = i;
-				if(i == currDate)
-					ele.classList.add("active");
-				content+=ele.outerHTML;
-			}
-			$(".calendar-timeline").html(`<div class="calendar-dates">${content}</div>`);
-			var scrollX = $(".calendar-timeline .calendar-dates .calendar-item.active").position().left;
-			document.querySelector(".calendar-timeline .calendar-dates").scrollTo(scrollX,0);
-		})();
 	</script>
 </body>
 </html>
