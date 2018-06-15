@@ -168,7 +168,6 @@
 			var container = document.querySelector(".header .current-date");
 			window.addEventListener("calendar-date-changed",function(e){
 				var date = DateFormat.format.date(e.detail,"ddd MMM, yyyy");
-				console.log(date);
 				container.innerHTML = date;
 			});
 		})();

@@ -54,12 +54,13 @@
     }
 
     function _render(){
+        var tmpDate = new Date(date.toString());
         var content = "";
         for (var i = 1; ; i++) {
-            date.setDate(i);
-            if (date.getMonth() != currMonth) break;
+            tmpDate.setDate(i);
+            if (tmpDate.getMonth() != currMonth) break;
             var ele = _htmlToElement(template);
-            ele.querySelector(".calendar-day").innerHTML = days[date.getDay()];
+            ele.querySelector(".calendar-day").innerHTML = days[tmpDate.getDay()];
             ele.querySelector(".calendar-date").innerHTML = i;
             if (i == currDate)
                 ele.classList.add("active");
