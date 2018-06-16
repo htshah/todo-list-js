@@ -18,10 +18,21 @@
 .no-margin-bottom {
   margin-bottom: 0 !important;
 }
+.no-margin-left {
+  margin-left: 0 !important;
+}
+.no-margin-right {
+  margin-right: 0 !important;
+}
+
+.no-overflow{
+    overflow: hidden;
+    height: 1px;
+}
 
 .fixed{
     position: fixed !important;
-    width: 100%;
+    width: inherit;
     z-index: 999;
 }
 
@@ -30,6 +41,22 @@ label{
 }
 [type="checkbox"]+span:not(.lever){
     padding-left: 15px;
+}
+
+input.big,textarea.big{
+    font-size: 2rem !important;
+}
+
+
+input.no-border,textarea.no-border ,.select-wrapper.no-border input{
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.btn.btn-small{
+    height: 30px;
+    line-height: 30px;
+    font-size: 12px;
 }
 
 /**

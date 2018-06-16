@@ -22,10 +22,22 @@
 .todo-item .todo-tag::before{
     content:"";
     position: absolute;
-    top: 7px;
-    left: calc(50% - 4px);
-    border: 4px solid rgb(253, 135, 131);
+    top: 6px;
+    left: calc(50% - 5px);
+    border: 5px solid;
     border-radius: 50%;			
+}
+.todo-item .todo-tag[data-tag="red"]::before{
+    border-color: #ec8a8a;
+}
+.todo-item .todo-tag[data-tag="green"]::before{
+    border-color: #89d68c;
+}
+.todo-item .todo-tag[data-tag="blue"]::before{
+    border-color: #75bffb;
+}
+.todo-item .todo-tag[data-tag="yellow"]::before{
+    border-color: #ffef5e;
 }
 .todo-item .todo-pin.pinned{
     padding: 6px;
