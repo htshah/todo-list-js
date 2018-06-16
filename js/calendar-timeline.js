@@ -41,16 +41,25 @@
             window.dispatchEvent(changeEvent);
         }
         
-        container.addEventListener("click",function(e){
-            var ele = e.srcElement.closest(".calendar-item");
-            if(ele === null)    return false;
-            document.querySelector(".calendar-item.active").classList.remove("active");
-            ele.classList.add("active");
-            date.setDate(ele.querySelector(".calendar-date").innerHTML);
+        // Fix for confusion between mouse click and drag
+        var isDragged = true;
+        container.addEventListener("mousedown",function(){
+            isDragged = false;
+        },false);
+        container.addEventListener("mousemove",function(){
+            isDragged = true;
+        },false);
+        container.addEventListener("mouseup",function(e){
+            if(!isDragged){
+                var ele = e.srcElement.closest(".calendar-item");
+                if (ele === null) return false;
+                document.querySelector(".calendar-item.active").classList.remove("active");
+                ele.classList.add("active");
+                date.setDate(ele.querySelector(".calendar-date").innerHTML);
 
-            window.dispatchEvent(changeEvent);
-            // return false;
-        });
+                window.dispatchEvent(changeEvent);
+            }
+        },false);
     }
 
     function _render(){
@@ -71,7 +80,8 @@
         // Scroll to the current date
         var activeItem = container.querySelector(".calendar-item.active");
         var offsetX = getOffset(activeItem).left;
-        var offsetErr = activeItem.offsetWidth;
+        // var offsetErr = activeItem.offsetWidth;
+        var offsetErr = 0;
         
         container.querySelector(".calendar-dates").scrollTo(offsetX - offsetErr, 0);
     }
