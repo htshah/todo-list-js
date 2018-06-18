@@ -141,11 +141,19 @@ function List(userOptions,seedList){
         return ele.closest(options.item).getAttribute(options.listIdAttr);
     }
     function _getItemFromArr(id,returnRef = true){
-        for(var i in list){
-            if(list[i][options.listId] == id)
-                return returnRef === true ? list[i]:Object.assign({},list[i]);
-        }
+        var index = _getItemIndex(id);
+        if(index != -1)
+            return returnRef === true ? list[i]:Object.assign({},list[i]);
         return null;
+    }
+
+    function _getItemIndex(item){
+        var id = typeof item === "object" ? _getElementId(item) : item;
+        for (var i in list) {
+            if (list[i][options.listId] == id)
+                return i;
+        }
+        return -1;
     }
     publicAPI.getListItem = _getItemFromArr;
 
@@ -157,7 +165,14 @@ function List(userOptions,seedList){
         if(render)
             _render();
     }
-    // function delete(){}
+    function deleteItem(id,render = false){
+        console.log("Before: "+list.length);
+        var index = _getItemIndex(id);
+        list.splice(index, 1);
+
+        if(render)  _render();
+        console.log("After: " + list.length);
+    }
     function update(id, values, render = true) {
       var item = _getItemFromArr(id);
       item = _extendDefaults(item, values);
@@ -168,6 +183,7 @@ function List(userOptions,seedList){
     
     publicAPI.add = add;
     publicAPI.update = update;
+    publicAPI.delete = deleteItem;
     
     return publicAPI;
 }
