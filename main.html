@@ -64,14 +64,12 @@
 		}
 		
 		@keyframes swipe-left{
-			0%{visibility: 1;}
-			75%{
-				visibility: 0;
-				transform: translate(-100%,0);
-			}
+			0%{visibility: 1;overflow:hidden;}
 			100%{
+				overflow:hidden;
 				height: 0px;
 				display:none;
+				transform: translate(-100%,0);
 			}
 		}
 		.animate-swipe-out-left{
@@ -109,6 +107,7 @@
 				<div class="header-main grid-container justify-space-between grid-col-2">
 					<div class="grid-item" style="display:grid;justify-self: start;">
 						<small class="sub-title current-date"></small>
+						<input type="text" id="input-new-date" class="datepicker" style="position:absolute;left:-999px;";>
 						<span class="title">To-Do List</span>
 					</div>
 					<div class="grid-item" style="place-self: center end;padding-top: 1.2rem;">
@@ -266,6 +265,9 @@
 	<script src="./js/list.js" type="text/javascript"></script>
 	
 	<script type="text/javascript">
+		/**
+		 * Gloval declarations and Initalization
+		**/
 		var listOpts = {
 			attributes:[
 				'name',
@@ -303,7 +305,7 @@
 			container: "#todo-list",
 			item:".todo-item-wrapper",
 			template: "#todo-template",
-			localStorage: true
+			localStorage: false
 		};
 		var seed = [
 			{name:"Item1",done:false, pinned:false},
@@ -331,12 +333,15 @@
 			{name:"Item3",done:true , pinned: false},
 			{name:"Item4",done:false, pinned: false},
 		];
-		var list = new List(listOpts);
+		var list = new List(listOpts,seed);
 		
 		$('select:not(.no-border)').formSelect();
 		$('select.no-border').formSelect({classes:"no-border"});
 
-		$('.datepicker').datepicker();
+		$('.datepicker:not(#input-new-date)').datepicker({
+			defaultDate: new Date(),
+			setDefaultDate:true
+		});
 		$('.timepicker').timepicker();
 		$(".datepicker").on("focus", function () {
 			if (!$(this).closest(".datepicker-modal").hasClass("open")) {
@@ -344,9 +349,6 @@
 			}
 		});
 		
-		/*$("#todo-module").hammer().bind("swipe",".todo-item-wrapper", function(){
-			console.log("swiped");
-		})*/
 		
 		/**
 		 * Handling add section
@@ -394,6 +396,7 @@
 
 		})();
 		
+		
 		/**
 		* Delete section
 		*/
@@ -415,28 +418,51 @@
 			$("#todo-list").on("delete",".todo-item-wrapper",deleteItem);
 
 			
+			// Swipe to delete
 			if(Modernizr.touchevents){
 				Swiped.init({
 					query: '#todo-list .todo-item-wrapper',
 					duration: 400,
-					tolerance:250,
-					right: 400,
+					tolerance:150,
+					right: window.innerWidth,
 					onOpen:function(){
-						$(this.elem).remove();
-						list.delete(this.elem);
+						var ele = $(this.elem);
+						list.delete(ele.attr("data-id"));
+						ele.remove();
 					},
 				});
 			}
 		})();
+		
+		
 		/**
-		 * Change the header date MMM,yyyy when calendar-timeline
-		 * has changed its date
+		 * Handle month change
 		 */
 		(function(){
 			var container = document.querySelector(".header .current-date");
+			var $container = $(container);
+			var $input = $("#input-new-date");
+			$input.find(".datepicker-table-wrapper").addClass("hide");
+			$input.fin
+			$input.datepicker({
+				changeMonth: true, 
+				changeYear: true,
+				format: 'yyyy-mm-01',
+			});
+			
+			// Update month and year on changed
 			window.addEventListener("calendar-date-changed",function(e){
 				var date = DateFormat.format.date(e.detail,"MMMM, yyyy");
 				container.innerHTML = date;
+			});
+			
+			// Set new date
+			$container.click(function(){
+				$input.trigger("click");
+				$input.on("change",function(){
+					console.log($(this).val());
+					CalendarTimeline.setDate($(this).val());
+				});
 			});
 		})();
 	</script>

@@ -3,7 +3,7 @@
  * Author: Het Shah
  * Email: htshah60@gmail.com
  */
-(function(){
+var CalendarTimeline = (function(){
     /**
     *	Initialization
     */
@@ -16,12 +16,13 @@
     
     
     // Get current date
-    var changeEvent = null;
-    var date = new Date();
+    var date = null;
+    var currDate = null;
+    var currMonth = null;
     var days = ['S','M','T','W','T','F','S'];
-    var currDate = date.getDate();
-    var currMonth = date.getMonth();
     
+    
+    _setDate(new Date().toString());
     _bindEvents();
     _render();
     
@@ -33,13 +34,15 @@
         tmp.innerHTML = htmlStr.trim();
         return tmp.content.firstChild;
     }
+    function _emmitChangeEvent(){
+        var changeEvent = new CustomEvent("calendar-date-changed", { detail: date }, true);
+        window.dispatchEvent(changeEvent);
 
+    }
     function _bindEvents(){
-        changeEvent = new CustomEvent("calendar-date-changed",{detail:date},true);
-        
         window.onload = function(){
-            window.dispatchEvent(changeEvent);
-        }
+            _emmitChangeEvent();
+        };
         
         // Fix for confusion between mouse click and drag
         var isDragged = true;
@@ -57,7 +60,7 @@
                 ele.classList.add("active");
                 date.setDate(ele.querySelector(".calendar-date").innerHTML);
 
-                window.dispatchEvent(changeEvent);
+                _emmitChangeEvent();
             }
         },false);
     }
@@ -65,6 +68,10 @@
     function _render(){
         var tmpDate = new Date(date.toString());
         var content = "";
+        //Set prev arrow
+        var arrowEle = _htmlToElement(template);
+        arrowEle.innerHTML = "&lt;";
+        content+=arrowEle.innerHTML;
         for (var i = 1; ; i++) {
             tmpDate.setDate(i);
             if (tmpDate.getMonth() != currMonth) break;
@@ -75,6 +82,9 @@
                 ele.classList.add("active");
             content += ele.outerHTML;
         }
+        //Set next arrow
+        arrowEle.innerHTML = "&gt;";
+        content += arrowEle.innerHTML;
         container.innerHTML = `<div class="calendar-dates dragscroll">${content}</div>`;
 
         // Scroll to the current date
@@ -93,4 +103,41 @@
             top: el.top + window.scrollY
         }
     }
+
+    function _setDate(dateStr){
+        date = new Date(dateStr);
+        currDate = date.getDate();
+        currMonth = date.getMonth();
+    }
+
+    function setDate(dateStr){
+        _setDate(dateStr);
+        _render();
+        _emmitChangeEvent();
+    }
+
+    return {
+        setDate: setDate,
+    };
+})();
+
+
+
+/**
+ * Polyfill for CustomEvents
+ */
+(function () {
+
+    if (typeof window.CustomEvent === "function") return false;
+
+    function CustomEvent(event, params) {
+        params = params || { bubbles: false, cancelable: false, detail: undefined };
+        var evt = document.createEvent('CustomEvent');
+        evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+        return evt;
+    }
+
+    CustomEvent.prototype = window.Event.prototype;
+
+    window.CustomEvent = CustomEvent;
 })();

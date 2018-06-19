@@ -1,5 +1,9 @@
 .todo-item{
-    border-radius: 15px;
+    border-radius      : 15px;
+    -webkit-user-select: none;
+    -moz-user-select   : none;
+    -ms-user-select    : none;
+    user-select        : none;
 }
 .todo-item .card-content{
     padding: 12px 15px;

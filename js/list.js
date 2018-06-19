@@ -141,8 +141,8 @@ function List(userOptions,seedList){
         return ele.closest(options.item).getAttribute(options.listIdAttr);
     }
     function _getItemFromArr(id,returnRef = true){
-        var index = _getItemIndex(id);
-        if(index != -1)
+        var i = _getItemIndex(id);
+        if(i != -1)
             return returnRef === true ? list[i]:Object.assign({},list[i]);
         return null;
     }
@@ -166,12 +166,10 @@ function List(userOptions,seedList){
             _render();
     }
     function deleteItem(id,render = false){
-        console.log("Before: "+list.length);
         var index = _getItemIndex(id);
         list.splice(index, 1);
 
         if(render)  _render();
-        console.log("After: " + list.length);
     }
     function update(id, values, render = true) {
       var item = _getItemFromArr(id);
